@@ -1,23 +1,20 @@
 import { useFrame, useThree } from '@react-three/fiber';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const Airplane: React.FC = () => {
   const airplaneRef = useRef<THREE.Group>(null!);
   const smokeParticles = useRef<THREE.Points>(null!);
-  const { camera, size } = useThree();
-  const particleCount = 1000; // Adjust this number as needed
-
-  const positions = new Float32Array(particleCount * 3);
+  const { camera } = useThree();
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useFrame(({ mouse }) => {
+    // Update mouse position
+    setMousePosition({ x: mouse.x, y: mouse.y });
+
     if (airplaneRef.current) {
       // Calculate airplane position based on mouse
-      const vector = new THREE.Vector3(
-        (mouse.x * size.width) / size.height,
-        -mouse.y,
-        0.5
-      );
+      const vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
       vector.unproject(camera);
       const dir = vector.sub(camera.position).normalize();
       const distance = -camera.position.z / dir.z;
@@ -47,10 +44,9 @@ const Airplane: React.FC = () => {
       </mesh>
       <points ref={smokeParticles}>
         <bufferGeometry>
-          <bufferAttribute
+        <bufferAttribute
             attach="attributes-position"
-            count={particleCount}
-            array={positions}
+            count={100}
             itemSize={3}
           />
         </bufferGeometry>
