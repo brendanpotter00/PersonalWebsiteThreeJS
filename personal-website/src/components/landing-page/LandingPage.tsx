@@ -9,8 +9,13 @@ import { useRef, useEffect, useState } from 'react';
 import Linkedin from '../threejs-components/link-components/Linkedin';
 import Github from '../threejs-components/link-components/Github';
 import Email from '../threejs-components/link-components/Email';
+import AboutSection from '../about-page/AboutSection';
+import ProjectSection from '../project-page/ProjectSection';
+import ExperienceSection from '../experience-section/ExperienceSection';
+import Footer from '../Footer';
 
 const LandingPage: React.FC = () => {
+  const isMobile = window.innerWidth < 768 || window.innerHeight < 10; // Check if mobile
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [scrollY, setScrollY] = useState(0);
 
@@ -24,18 +29,16 @@ const LandingPage: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ position: 'relative', minHeight: '300vh', pointerEvents: 'none' }}>
+    <div style={{ position: 'relative', minHeight: isMobile ? '200vh' : '300vh' }}>
       <Header />
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
-        <Canvas ref={canvasRef} style={{ background: '#001f3f' }} camera={{ position: [0, 0, 10], fov: 50 }}>
+        <Canvas ref={canvasRef} style={{ background: '#001f3f', pointerEvents: 'auto' }} camera={{ position: [0, 0, isMobile ? 5 : 10], fov: 50 }}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} intensity={0.5} />
           <directionalLight position={[-10, 10, 5]} intensity={1} />
           <OrbitControls enableZoom={false} enablePan={true} enableRotate={true} />
           
-          {/* Pass scrollY to Earth and other components */}
           <Earth scrollY={scrollY} />
-          {/* <Text3D /> */}
           <LowPolyAirplane scrollY={scrollY} />
           <Computer scrollY={scrollY} />
           <Linkedin scrollY={scrollY} />
@@ -45,17 +48,19 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* Scrollable text sections */}
-      <div style={{ position: 'relative', zIndex: 5, paddingTop: '200px' }}>
+      <div style={{ position: 'relative', zIndex: 5, paddingTop: isMobile ? '100px' : '200px' }}>
         <section id="section1" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-          <h2 style={{ fontSize: '2.5rem', color: 'white' }}>Hello World</h2>
-          <div style={{ fontSize: '2.5rem', color: 'white' }} > My Name is Brendan Potter </div>
+          <h2 style={{ fontSize: isMobile ? '1.5rem' : '2.5rem', color: 'white' }}>Hello World</h2>
+          <div style={{ fontSize: isMobile ? '1.5rem' : '2.5rem', color: 'white' }}> My Name is Brendan Potter </div>
         </section>
-        <section id="about" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', color: 'white' }}>Section 2: About the Project</h2>
-        </section>
-        <section id="projects" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', color: 'white' }}>projs: Explore More</h2>
-        </section>
+        
+        <AboutSection />
+        <div className="my-16"></div> 
+        <ExperienceSection />
+        <div className="my-16"></div> 
+        <ProjectSection />
+        <div className="my-16"></div> 
+        <Footer />
       </div>
     </div>
   );

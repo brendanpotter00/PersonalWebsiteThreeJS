@@ -3,17 +3,20 @@ import styled from 'styled-components';
 
 const HeaderContainer = styled.header`
   display: flex;
+  flex-direction: column; /* Stack items on mobile */
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
+  padding: 1rem;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: rgba(0, 31, 63, 0.8); // Semi-transparent dark blue
-  backdrop-filter: blur(5px);
-  transition: background-color 0.3s ease;
+  background-color: rgba(0, 31, 63, 0.8);
+  
+  @media (min-width: 768px) {
+    flex-direction: row; /* Row layout for larger screens */
+  }
 `;
 
 const NavLinks = styled.nav`
@@ -42,6 +45,7 @@ const Header: React.FC = () => {
       <HeaderText>Brendan Potter</HeaderText>
       <NavLinks>
         <Link href="#about">About</Link>
+        <Link href="#experience">Experience</Link>
         <Link href="#projects">Projects</Link>
         <Link href="#contact">Contact</Link>
       </NavLinks>
